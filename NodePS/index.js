@@ -8,6 +8,7 @@ const Shell = require('node-powershell');
 const ps = new Shell({
     executionPolicy: 'Bypass',
     noProfile: true
+});
 
 
 //PS Request to site 
