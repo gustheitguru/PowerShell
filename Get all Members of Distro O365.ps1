@@ -10,37 +10,41 @@ $Session = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri ht
 #Import Session
 Import-PSSession $Session
 
+#Set Date
+$Date = Get-Date -Format "MM/dd/yyyy"  
+$NewDate = ForEach-Object { $Date -replace "/", "." }
+#write-host $Date
+write-host $NewDate
+
 #Which Distro
 $DistroName = Read-Host -Prompt "Distro Name Please..."
 
 #The CSV Output file that is created, change for your purposes  
-$OutputFile = "DistributionGroupMembersFor'$DistroName'.csv"
+$OutputFile = "Distribution Group Members For $DistroName $NewDate.csv"
 
 #Prepare Output file with headers  
 Out-File -FilePath $OutputFile -InputObject "Distribution Group DisplayName,Distribution Group Email,Member DisplayName, Member Email, Member Type" -Encoding UTF8
 
-#Distrabution Group Call
-$objDistributionGroups = Get-DynamicDistributionGroup -Identity $DistroName -ResultSize Unlimited  
+#Get Distro Info
+$DistProp = Get-DistributionGroup -Identity $DistroName
+write-host  "Email = " $DistProp.PrimarySMTPAddress
+
+#Get members of this group  
+$objDGMembers = Get-DistributionGroupMember -Identity $DistroName
+      
 
 
-#Iterate through all groups, one at a time      
-Foreach ($objDistributionGroup in $objDistributionGroups)  
-{      
-     
-    write-host "Processing $($objDistributionGroup.DisplayName)..."  
-  
-    #Get members of this group  
-    $objDGMembers = Get-DistributionGroupMember -Identity $($objDistributionGroup.PrimarySmtpAddress)  
-      
-    write-host "Found $($objDGMembers.Count) members..."  
-      
-    #Iterate through each member  
-    Foreach ($objMember in $objDGMembers)  
-    {  
-        Out-File -FilePath $OutputFile -InputObject "$($objDistributionGroup.DisplayName),$($objDistributionGroup.PrimarySMTPAddress),$($objMember.DisplayName),$($objMember.PrimarySMTPAddress),$($objMember.RecipientType)" -Encoding UTF8 -append  
-        write-host "`t$($objDistributionGroup.DisplayName),$($objDistributionGroup.PrimarySMTPAddress),$($objMember.DisplayName),$($objMember.PrimarySMTPAddress),$($objMember.RecipientType)" 
-    }  
-}  
+
+write-host "Found $($objDGMembers.Count) members..."  
+
+
+#Iterate through each member  
+Foreach ($objMember in $objDGMembers)  
+	{  
+		Out-File -FilePath $OutputFile -InputObject "$($DistProp),$($DistProp.PrimarySMTPAddress),$($objMember.DisplayName),$($objMember.PrimarySMTPAddress),$($objMember.RecipientType)" -Encoding UTF8 -append  
+		write-host "`t$($DistProp),$($DistProp.PrimarySMTPAddress),$($objMember.DisplayName),$($objMember.PrimarySMTPAddress),$($objMember.RecipientType)" 
+	}  
+ 
  
 #Close up session  
 Get-PSSession | Remove-PSSession  
