@@ -13,11 +13,14 @@ const ps = new Shell({
 
 //PS Request to site 
 app.use('/', (req, res) => {
-    ps.addCommand(`Get-Process | ? { $_.name -like '*chrome*' }`);
+    // ps.addCommand(`Get-Process | ? { $_.name -like '*chrome*' }`);
+    ps.addCommand("Get-NetIPAddress -AddressFamily IPv4 -InterfaceAlias *wi-fi* | ConvertTo-Json");
     ps.invoke()
         .then(response => {
-        	console.log(response)
-            res.json(response)
+        	// console.log(typeof response)
+        	let newString = JSON.parse(response)
+        	// console.log(newString)
+            res.json(newString)
         })
         .catch(err => {
             res.json(err)
