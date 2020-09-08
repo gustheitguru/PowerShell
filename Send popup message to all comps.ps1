@@ -6,4 +6,5 @@ $Message = Read-Host Enter Message
 
 (Get-ADComputer -SearchBase "OU=Computers,OU=MyBusiness,DC=gbchdomain,DC=local" -Filter *).Name | Foreach-Object {
 	msg * /server:$_ /TIME:900 "$Message"
+	write-host $_
 }
