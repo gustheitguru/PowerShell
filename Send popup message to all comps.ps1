@@ -5,6 +5,8 @@ $Message = Read-Host Enter Message
 #You can remove the /TIME: to leave message on screen for ever
 
 (Get-ADComputer -SearchBase "OU=Computers,OU=MyBusiness,DC=gbchdomain,DC=local" -Filter *).Name | Foreach-Object {
+	write-host ----------------------------
 	msg * /server:$_ /TIME:900 "$Message"
 	write-host $_
+	write-host ____________________________
 }

@@ -5,7 +5,7 @@ Get-PSSession | Remove-PSSession
 $UserCredential = Get-Credential
 
 #Start Session to connecto to O365
-$Session = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri https://outlook.office365.com/powershell-liveid/ -Credential $UserCredential -Authentication Basic -AllowRedirection
+$Session = New-PSSession -ConfigurationName Microsoft.Exchange -ConnectionUri https://ou[- tlook.office365.com/powershell-liveid/ -Credential $UserCredential -Authentication Basic -AllowRedirection
 
 #Import Session
 Import-PSSession $Session
