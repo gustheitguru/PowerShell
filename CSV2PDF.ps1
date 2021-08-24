@@ -1,21 +1,21 @@
 ﻿#Input File
-$Input = 'D:\CSV2PDF\AWS-Check-20210416.csv'
+$Input = 'D:\CSV2PDF\SAP program check 20210414.html'
 #Output File
-$Output = 'D:\CSV2PDF\AWS-Check-20210416.pdf'
+$Output = 'D:\CSV2PDF\SAP program check 20210414.pdf'
 
-#CAlling Virutal excel shell 
-$Exl = New-Object -ComObject Excel.Application
-#Opening CSV in Excel Shell
-$Doc = $Exl.Workbooks.Open($Input)
-#Converting CSV2PDF
-$Doc.ExportAsFixedFormat([Microsoft.Office.Interop.Excel.XlFixedFormatType]::xlTypePDF, $Output)
-#Closing the Document
-$Doc.Close($False)
-[gc]::Collect()
-[gc]::WaitForPendingFinalizers()
+$wrd = new-object -com word.application 
+ 
+# Make Word Visible 
+$wrd.visible = $false
+ 
+# Open a document  
+$doc = $wrd.documents.open($input) 
 
-#Closing Excel Shell and cleaning temp Var's
-$Exl.Quit()
-[System.Runtime.Interopservices.Marshal]::ReleaseComObject($Exl)
-Remove-Variable Exl
-Remove-Item Function:Exl-PDF
+# Save as pdf
+$opt = 17
+$name = $output
+#Write-Output $output
+$wrd.ActiveDocument.Saveas([ref]$name,[ref]$opt)
+
+# Close and go home
+$wrd.Quit()
