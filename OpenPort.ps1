@@ -1,0 +1,2 @@
+3306 | % {echo ((new-object Net.Sockets.TcpClient).Connect("139.64.200.148",$_)) "Port $_ is open!"} 2>$null
+1433 | % {echo ((new-object Net.Sockets.TcpClient).Connect("139.64.200.135",$_)) "Port $_ is open!"} 2>$null
